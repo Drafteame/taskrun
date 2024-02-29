@@ -26,14 +26,3 @@ repos:
     hooks:
       - id: commitizen
         stages: [commit-msg]
-
-  - repo: https://github.com/Drafteame/json-keys-diff-hook
-    rev: v0.0.4
-    hooks:
-      - id: jkdiff-folder
-        args: [ "--match=ejson$" ]
-
-  - repo: https://github.com/Drafteame/ejson-hooks
-    rev: 0.0.6
-    hooks:
-      - id: encrypt
