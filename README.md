@@ -5,7 +5,7 @@ Simple cli that helps to create jobs from configurable commands
 ## Installation
 
 ```bash
-go install github.com/Drafteame/taskrun/cmd/taskrun@latest
+go install github.com/Drafteame/taskrun@latest
 ```
 
 ## Usage
