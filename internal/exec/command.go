@@ -7,6 +7,8 @@ import (
 	"os/exec"
 )
 
+// TODO: implement internal exec package using https://github.com/mvdan/sh
+
 type Command struct {
 	cmd    string
 	args   []string
