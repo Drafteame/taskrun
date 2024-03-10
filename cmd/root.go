@@ -39,7 +39,7 @@ func init() {
 	RootCmd.PersistentFlags().StringVarP(&awsRegionFlag, "aws-region", "r", "", "AWS region to use")
 	RootCmd.PersistentFlags().StringVarP(&awsProfileFlag, "aws-profile", "p", "", "AWS profile to use")
 	RootCmd.PersistentFlags().StringVarP(&jobsFileFlag, "jobs-file", "j", defaultJobsFile, "Path to the jobs file")
-	RootCmd.PersistentFlags().StringVarP(&stageFlag, "stage", "s", "local", "Stage to run the migrations")
+	RootCmd.PersistentFlags().StringVarP(&stageFlag, "stage", "s", "", "Stage to run the migrations")
 	RootCmd.PersistentFlags().BoolVarP(&debugFlag, "debug", "d", false, "Enable debug mode")
 }
 
@@ -50,15 +50,43 @@ func getReplacers() map[string]string {
 	}
 }
 
-func getJob(job string) (models.Job, error) {
+func setStage(cfg models.Jobs) {
+	if stageFlag == "" {
+		stageFlag = cfg.DefaultStage
+	}
+
+	if stageFlag == "" {
+		for stage := range cfg.Jobs {
+			stageFlag = stage
+			break
+		}
+	}
+
+	if stageFlag == "" {
+		log.Fatal("Error: no stage defined")
+	}
+}
+
+func getJobs() ([]models.Job, error) {
 	cfg, err := config.LoadConfigFromPath(jobsFileFlag, getReplacers())
 	if err != nil {
-		return models.Job{}, err
+		return []models.Job{}, err
 	}
+
+	setStage(cfg)
 
 	stageJobs, ok := cfg.Jobs[stageFlag]
 	if !ok {
-		return models.Job{}, fmt.Errorf("stage %s not found", stageFlag)
+		return []models.Job{}, fmt.Errorf("stage %s not found", stageFlag)
+	}
+
+	return stageJobs, nil
+}
+
+func getJob(job string) (models.Job, error) {
+	stageJobs, err := getJobs()
+	if err != nil {
+		return models.Job{}, err
 	}
 
 	for _, j := range stageJobs {
@@ -67,7 +95,7 @@ func getJob(job string) (models.Job, error) {
 		}
 	}
 
-	return models.Job{}, fmt.Errorf("job %s not found", job)
+	return models.Job{}, fmt.Errorf("job %s not found on stage %s", job, stageFlag)
 }
 
 func getAwsConfig() aws.Config {
@@ -95,19 +123,17 @@ func getWorkingDir() string {
 		panic(err)
 	}
 
-	basepath := path.Dir(jobsFileFlag)
+	basePath := path.Dir(jobsFileFlag)
 
-	if path.IsAbs(basepath) {
-		cwd = basepath
+	if path.IsAbs(basePath) {
+		cwd = basePath
 	} else {
-		cwd = path.Join(cwd, basepath)
+		cwd = path.Join(cwd, basePath)
 	}
 
 	return cwd
 }
 
-func setWorkingDir() {
-	if err := os.Chdir(getWorkingDir()); err != nil {
-		panic(err)
-	}
+func printf(format string, a ...any) {
+	_, _ = fmt.Printf(format, a...)
 }

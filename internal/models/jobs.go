@@ -9,7 +9,8 @@ import (
 )
 
 type Jobs struct {
-	Jobs map[string][]Job `yaml:"jobs"`
+	DefaultStage string           `yaml:"default_stage"`
+	Jobs         map[string][]Job `yaml:"jobs"`
 }
 
 type Job struct {

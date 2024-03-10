@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/spf13/cobra"
@@ -27,5 +26,5 @@ func printJob(cmd *cobra.Command, args []string) {
 		log.Fatal("Error: ", err)
 	}
 
-	_, _ = fmt.Printf("Config: \n---------\n%s", job.ToJobConfig(getAwsConfig()).ToYAML())
+	printf("Config: \n---------\n%s", job.ToJobConfig(getAwsConfig()).ToYAML())
 }

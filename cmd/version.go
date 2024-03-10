@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 
 	"github.com/Drafteame/taskrun/internal"
@@ -20,5 +18,5 @@ func init() {
 }
 
 func printVersion(cmd *cobra.Command, args []string) {
-	_, _ = fmt.Printf("Version: %s\n", internal.Version)
+	printf("Version: %s\n", internal.Version)
 }
