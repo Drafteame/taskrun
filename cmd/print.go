@@ -1,8 +1,7 @@
-package main
+package cmd
 
 import (
 	"fmt"
-
 	"log"
 
 	"github.com/spf13/cobra"
@@ -17,7 +16,7 @@ var printCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(printCmd)
+	RootCmd.AddCommand(printCmd)
 }
 
 func printJob(cmd *cobra.Command, args []string) {

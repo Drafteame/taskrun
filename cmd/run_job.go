@@ -1,8 +1,7 @@
-package main
+package cmd
 
 import (
 	"fmt"
-
 	"log"
 
 	"github.com/spf13/cobra"
@@ -20,7 +19,7 @@ var runJobCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(runJobCmd)
+	RootCmd.AddCommand(runJobCmd)
 }
 
 func runJob(cmd *cobra.Command, args []string) {

@@ -7,7 +7,7 @@ help:
 	@echo "test     run tests"
 
 build:
-	go build -ldflags="-s -w -X 'github.com/Drafteame/taskrun/internal.Version=0.0.0'" -o ./.bin/taskrun ./cmd/taskrun
+	go build -ldflags="-s -w -X 'github.com/Drafteame/taskrun/internal.Version=0.0.0'" -o ./.bin/taskrun ./
 
 
 lint:
