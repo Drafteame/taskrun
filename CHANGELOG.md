@@ -1,3 +1,8 @@
+## v0.0.3 (2024-03-10)
+
+
+- fix: go releaser set version flags (#4)
+
 ## v0.0.2 (2024-03-10)
 
 
