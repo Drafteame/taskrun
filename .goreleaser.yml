@@ -18,7 +18,7 @@ builds:
     env:
       - CGO_ENABLED=0
     ldflags:
-      - "-s -w -X 'yourmodule/internal.Version={{.Version}}'"
+      - "-s -w -X 'github.com/Drafteame/taskrun/internal.Version={{.Version}}'"
     flags:
       - -trimpath
 
