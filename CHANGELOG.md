@@ -1,0 +1,13 @@
+## v0.0.1 (2024-03-10)
+
+
+- ci: add test an release pipelines (#2)
+- chore: save (#1)
+- docs: add todo
+- chore: add default stage configuration
+- fix: main file
+- fix: install name
+- fix: install name
+- ci: remove unneded hooks
+- chore: main structure
+- Initial commit
