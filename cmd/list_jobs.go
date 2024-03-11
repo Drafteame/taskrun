@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/spf13/cobra"
+
+	"github.com/Drafteame/taskrun/internal/config"
 )
 
 var listJobsCmd = &cobra.Command{
@@ -19,7 +20,7 @@ func init() {
 }
 
 func listJobs(cmd *cobra.Command, args []string) {
-	stageJobs, err := getJobs()
+	stageJobs, err := config.GetJobs(stageFlag, jobsFileFlag)
 	if err != nil {
 		log.Fatal("Error: ", err)
 	}
@@ -27,6 +28,6 @@ func listJobs(cmd *cobra.Command, args []string) {
 	printf("Jobs for stage %s:\n---------\n", stageFlag)
 
 	for _, j := range stageJobs {
-		_, _ = fmt.Printf("- %s\n", j.Name)
+		printf("- %s\n", j.Name)
 	}
 }

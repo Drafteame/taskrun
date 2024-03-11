@@ -25,12 +25,17 @@ jobs:
         - '"Hello, World!"'
       env:
         # This remote loads the values from the specified source and key. If the source is not specified
-        # it will be omitted
+        # it will be omitted.
+        #
+        # Remote is the first to be loaded, so if there is a conflict with the vars, the remote value will be
+        # overwritten.
         remote:
           source: secretsmanager
           key: secret-name
           
-        # This vars will be loaded after the remote, so if there is a conflict the remote value will be overwritten.
+        # This vars will be loaded after the remote. The resolve order for var sources is env, ssm and static.
+        # If there are dependencies between vars, these are resolved at the end by replacing the collected values
+        # and resolving recursively all missing vars at that moment.
         vars:
           # This is a hardcoded value
           SOME_VAR:
@@ -133,3 +138,4 @@ jobs:
 |---------------------|-----------------------------------------------------------------------|
 | `${env:<some-env>}` | Replace the value of the environment variable after source resolution |
 | `${sys:cwd}`        | It sets the value of the current working directory as absolute path   |
+| `${self:stage}`     | Sets the current selected stage and replace it on templates           |

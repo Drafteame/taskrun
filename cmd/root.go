@@ -10,8 +10,6 @@ import (
 	"github.com/spf13/cobra"
 
 	awsconfig "github.com/Drafteame/taskrun/internal/aws/config"
-	"github.com/Drafteame/taskrun/internal/config"
-	"github.com/Drafteame/taskrun/internal/models"
 )
 
 var RootCmd = &cobra.Command{
@@ -49,57 +47,9 @@ func init() {
 
 func getReplacers() map[string]string {
 	return map[string]string{
-		"flag:stage": stageFlag,
+		"self:stage": stageFlag,
 		"sys:cwd":    getWorkingDir(),
 	}
-}
-
-func setStage(cfg models.Jobs) {
-	if stageFlag == "" {
-		stageFlag = cfg.DefaultStage
-	}
-
-	if stageFlag == "" {
-		for stage := range cfg.Jobs {
-			stageFlag = stage
-			break
-		}
-	}
-
-	if stageFlag == "" {
-		log.Fatal("Error: no stage defined")
-	}
-}
-
-func getJobs() ([]models.Job, error) {
-	cfg, err := config.LoadConfigFromPath(jobsFileFlag, getReplacers())
-	if err != nil {
-		return []models.Job{}, err
-	}
-
-	setStage(cfg)
-
-	stageJobs, ok := cfg.Jobs[stageFlag]
-	if !ok {
-		return []models.Job{}, fmt.Errorf("stage %s not found", stageFlag)
-	}
-
-	return stageJobs, nil
-}
-
-func getJob(job string) (models.Job, error) {
-	stageJobs, err := getJobs()
-	if err != nil {
-		return models.Job{}, err
-	}
-
-	for _, j := range stageJobs {
-		if j.Name == job {
-			return j, nil
-		}
-	}
-
-	return models.Job{}, fmt.Errorf("job %s not found on stage %s", job, stageFlag)
 }
 
 func getAwsConfig() aws.Config {

@@ -7,7 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
 )
 
-func MustGetParameter(param string, cfg aws.Config) string {
+func GetParameter(param string, cfg aws.Config) (string, error) {
 	client := ssm.NewFromConfig(cfg)
 
 	out, errGet := client.GetParameter(context.Background(), &ssm.GetParameterInput{
@@ -15,12 +15,12 @@ func MustGetParameter(param string, cfg aws.Config) string {
 	})
 
 	if errGet != nil {
-		panic(errGet)
+		return "", errGet
 	}
 
 	if out.Parameter.Value != nil {
-		return *out.Parameter.Value
+		return *out.Parameter.Value, nil
 	}
 
-	return ""
+	return "", nil
 }

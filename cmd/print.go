@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"github.com/Drafteame/taskrun/internal/config"
+	"github.com/Drafteame/taskrun/internal/templating"
 	"log"
 
 	"github.com/spf13/cobra"
@@ -21,10 +23,19 @@ func init() {
 func printJob(cmd *cobra.Command, args []string) {
 	jobName := args[0]
 
-	job, err := getJob(jobName)
+	job, err := config.GetJob(jobName, stageFlag, jobsFileFlag)
 	if err != nil {
 		log.Fatal("Error: ", err)
 	}
 
-	printf("Config: \n---------\n%s", job.ToJobConfig(getAwsConfig()).ToYAML())
+	jobCfg, errRender := templating.NewJobTemplate(job).
+		WithData(getReplacers()).
+		WithAWSConfig(getAwsConfig()).
+		Render()
+
+	if errRender != nil {
+		log.Fatal("Error: ", errRender)
+	}
+
+	printf("Config: \n---------\n%s", jobCfg.ToYAML())
 }
