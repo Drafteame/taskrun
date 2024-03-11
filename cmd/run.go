@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"github.com/Drafteame/taskrun/internal/config"
+	"github.com/Drafteame/taskrun/internal/templating"
 	"log"
 
 	"github.com/spf13/cobra"
@@ -10,9 +12,9 @@ import (
 )
 
 var runJobCmd = &cobra.Command{
-	Use:   "run [job-name]",
-	Short: "Run a job",
-	Long:  "Run the requested job configuration",
+	Use:   "run [task-name]",
+	Short: "Run a task",
+	Long:  "Run the requested task configuration",
 	Args:  cobra.ExactArgs(1),
 	Run:   runJob,
 }
@@ -24,21 +26,28 @@ func init() {
 func runJob(cmd *cobra.Command, args []string) {
 	jobName := args[0]
 
-	job, err := getJob(jobName)
+	job, err := config.GetJob(jobName, stageFlag, jobsFileFlag)
 	if err != nil {
 		log.Fatal("Error: ", err)
 	}
 
-	jobConfig := job.ToJobConfig(getAwsConfig())
+	jobCfg, errRender := templating.NewJobTemplate(job).
+		WithData(getReplacers()).
+		WithAWSConfig(getAwsConfig()).
+		Render()
 
-	if debugFlag {
-		printf("Config: \n---------\n%s", jobConfig.ToYAML())
+	if errRender != nil {
+		log.Fatal("Error: ", errRender)
 	}
 
-	executeCommand(jobConfig)
+	if debugFlag {
+		printf("Config: \n---------\n%s", jobCfg.ToYAML())
+	}
+
+	executeCommand(jobCfg)
 }
 
-func executeCommand(j models.JobConfig) {
+func executeCommand(j *models.JobConfig) {
 	cwd := getWorkingDir()
 
 	println("Running job: ", j.Name)

@@ -1,34 +1,23 @@
 package config
 
 import (
-	"fmt"
+	"github.com/Drafteame/taskrun/internal/models"
 	"log"
 	"os"
-	"regexp"
-
-	"gopkg.in/yaml.v3"
-
-	"github.com/Drafteame/taskrun/internal/models"
 )
 
-func LoadConfigFromPath(path string, replace map[string]string) (models.Jobs, error) {
+func LoadConfigFromPath(path string) (*models.Jobs, error) {
 	fileContent, err := getFileContent(path)
 	if err != nil {
-		return models.Jobs{}, err
+		return nil, err
 	}
 
-	strContent, errRep := applyReplacers(string(fileContent), replace)
-	if errRep != nil {
-		return models.Jobs{}, errRep
+	jobs := &models.Jobs{}
+	if err := jobs.FromYAML(fileContent); err != nil {
+		return nil, err
 	}
 
-	config := models.Jobs{}
-
-	if errDecode := yaml.Unmarshal([]byte(strContent), &config); errDecode != nil {
-		return models.Jobs{}, errDecode
-	}
-
-	return config, nil
+	return jobs, nil
 }
 
 func getFileContent(path string) ([]byte, error) {
@@ -56,17 +45,4 @@ func getFileContent(path string) ([]byte, error) {
 	}
 
 	return fileContent, nil
-}
-
-func applyReplacers(content string, replace map[string]string) (string, error) {
-	for k, v := range replace {
-		exp, err := regexp.Compile(fmt.Sprintf(`\$\{(\s+)?%s(\s+)?\}`, k))
-		if err != nil {
-			return "", err
-		}
-
-		content = exp.ReplaceAllString(content, v)
-	}
-
-	return content, nil
 }
