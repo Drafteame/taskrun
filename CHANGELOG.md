@@ -1,3 +1,11 @@
+## v0.0.5 (2024-03-11)
+
+
+- chore: enhance template resolution (#6)
+- * chore: enhance template rendering process
+
+* chore: change job work and start using task
+
 ## v0.0.4 (2024-03-11)
 
 
