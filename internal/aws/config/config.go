@@ -5,6 +5,8 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
+
+	"github.com/Drafteame/taskrun/internal/aws/config/credentials"
 )
 
 func Get(opts ...Option) (aws.Config, error) {
@@ -21,6 +23,15 @@ func Get(opts ...Option) (aws.Config, error) {
 
 	if o.profile != "" {
 		awsOpts = append(awsOpts, config.WithSharedConfigProfile(o.profile))
+	}
+
+	if o.accessKey != "" {
+		provider := credentials.NewProvider(aws.Credentials{
+			AccessKeyID:     o.accessKey,
+			SecretAccessKey: o.secretKey,
+		})
+
+		awsOpts = append(awsOpts, config.WithCredentialsProvider(provider))
 	}
 
 	return config.LoadDefaultConfig(context.Background(), awsOpts...)
