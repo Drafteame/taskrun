@@ -1,3 +1,8 @@
+## v0.0.6 (2024-03-11)
+
+
+- fix: replace not found or defined envs as empty strings (#7)
+
 ## v0.0.5 (2024-03-11)
 
 
