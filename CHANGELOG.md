@@ -1,3 +1,8 @@
+## v0.0.4 (2024-03-11)
+
+
+- chore: add flags to configure static aws access keys (#5)
+
 ## v0.0.3 (2024-03-10)
 
 
