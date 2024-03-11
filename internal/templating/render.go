@@ -22,12 +22,17 @@ func (jt *JobTemplate) Render() (*models.JobConfig, error) {
 	}
 
 	jt.renderFinalEnvs()
+	jt.removeNotFoundEnvsFromTemplate()
 
 	if err := jt.jobModel.FromYAML([]byte(jt.template)); err != nil {
 		return nil, err
 	}
 
 	return jt.jobModel.ToJobConfig(jt.finalEnvs), nil
+}
+
+func (jt *JobTemplate) removeNotFoundEnvsFromTemplate() {
+	jt.template = MatchAnyEnv.ReplaceAllString(jt.template, "")
 }
 
 func (jt *JobTemplate) renderFinalEnvs() {
