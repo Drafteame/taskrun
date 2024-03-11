@@ -8,18 +8,18 @@ import (
 	"github.com/Drafteame/taskrun/internal/config"
 )
 
-var listJobsCmd = &cobra.Command{
-	Use:   "list-jobs",
-	Short: "List all available jobs",
-	Long:  "List all available jobs for database migration",
-	Run:   listJobs,
+var listTasksCmd = &cobra.Command{
+	Use:   "list-tasks",
+	Short: "List all available tasks",
+	Long:  "List all available tasks for database migration",
+	Run:   listTasks,
 }
 
 func init() {
-	RootCmd.AddCommand(listJobsCmd)
+	RootCmd.AddCommand(listTasksCmd)
 }
 
-func listJobs(cmd *cobra.Command, args []string) {
+func listTasks(cmd *cobra.Command, args []string) {
 	stageJobs, err := config.GetJobs(stageFlag, jobsFileFlag)
 	if err != nil {
 		log.Fatal("Error: ", err)

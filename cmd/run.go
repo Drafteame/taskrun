@@ -12,9 +12,9 @@ import (
 )
 
 var runJobCmd = &cobra.Command{
-	Use:   "run [job-name]",
-	Short: "Run a job",
-	Long:  "Run the requested job configuration",
+	Use:   "run [task-name]",
+	Short: "Run a task",
+	Long:  "Run the requested task configuration",
 	Args:  cobra.ExactArgs(1),
 	Run:   runJob,
 }

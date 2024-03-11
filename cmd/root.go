@@ -47,8 +47,8 @@ func init() {
 
 func getReplacers() map[string]string {
 	return map[string]string{
-		"self:stage": stageFlag,
-		"sys:cwd":    getWorkingDir(),
+		`self(\s+)?:(\s+)?stage`: stageFlag,
+		`sys(\s+)?:(\s+)?cwd`:    getWorkingDir(),
 	}
 }
 
