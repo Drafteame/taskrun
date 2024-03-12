@@ -13,8 +13,8 @@ func (jt *JobTemplate) Render() (*models.JobConfig, error) {
 		return nil, errFrom
 	}
 
-	if !jt.jobModel.Env.HasVars() {
-		return jt.jobModel.ToJobConfig(nil), nil
+	if errRemote := jt.renderRemote(); errRemote != nil {
+		return nil, errRemote
 	}
 
 	if err := jt.renderDynamic(); err != nil {
@@ -50,8 +50,11 @@ func (jt *JobTemplate) renderTemplateData() error {
 }
 
 func (jt *JobTemplate) renderDynamic() error {
+	if !jt.jobModel.Env.HasVars() {
+		return nil
+	}
+
 	renderers := []func() error{
-		jt.renderRemote,
 		jt.getSystemEnvValues,
 		jt.renderSSMEnvValues,
 		jt.renderStaticEnvValues,
