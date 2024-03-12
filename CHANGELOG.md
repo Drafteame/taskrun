@@ -1,3 +1,8 @@
+## v0.0.7 (2024-03-12)
+
+
+- fix: wrong skip on dependant vars resolution (#8)
+
 ## v0.0.6 (2024-03-11)
 
 
