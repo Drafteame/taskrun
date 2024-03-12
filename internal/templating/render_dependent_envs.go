@@ -56,11 +56,13 @@ func (jt *JobTemplate) renderDependant(name, value string, callback func(string,
 		final, ok := jt.finalEnvs[dep]
 		if ok {
 			value = MatchEnv(dep).ReplaceAllString(value, final)
+			continue
 		}
 
 		envVar, exists := jt.jobModel.Env.Vars[dep]
 		if !exists {
 			value = MatchEnv(dep).ReplaceAllString(value, "")
+			continue
 		}
 
 		if err := jt.renderDependantEnv(dep, envVar); err != nil {
