@@ -1,3 +1,8 @@
+## v0.0.8 (2024-03-12)
+
+
+- fix: remotes are not solved if vars are empty (#9)
+
 ## v0.0.7 (2024-03-12)
 
 
