@@ -1,3 +1,8 @@
+## v0.1.0 (2024-03-13)
+
+
+- feat: add --json flag to list stage tasks (#10)
+
 ## v0.0.8 (2024-03-12)
 
 
