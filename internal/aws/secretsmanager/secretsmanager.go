@@ -3,6 +3,7 @@ package secretsmanager
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
@@ -12,7 +13,7 @@ import (
 func GetSecret(ctx context.Context, secretName string, cfg aws.Config) (map[string]string, error) {
 	client := secretsmanager.NewFromConfig(cfg)
 
-	result := make(map[string]string)
+	result := make(map[string]any)
 
 	getSecretValueInput := secretsmanager.GetSecretValueInput{
 		SecretId: aws.String(secretName),
@@ -31,5 +32,11 @@ func GetSecret(ctx context.Context, secretName string, cfg aws.Config) (map[stri
 		return nil, err
 	}
 
-	return result, nil
+	resString := make(map[string]string)
+
+	for k, v := range result {
+		resString[k] = fmt.Sprintf("%v", v)
+	}
+
+	return resString, nil
 }
