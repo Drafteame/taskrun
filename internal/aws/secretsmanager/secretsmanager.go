@@ -32,6 +32,7 @@ func GetSecret(ctx context.Context, secretName string, cfg aws.Config) (map[stri
 		return nil, err
 	}
 
+	// cast the result to string
 	resString := make(map[string]string)
 
 	for k, v := range result {
