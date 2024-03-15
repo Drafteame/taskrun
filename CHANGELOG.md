@@ -1,3 +1,10 @@
+## v0.1.2 (2024-03-15)
+
+
+- fix: secrets normalized response to string values (#14)
+- ci: fix secrets normalized response to string values (#13)
+- docs: remove unneded files (#12)
+
 ## v0.1.1 (2024-03-13)
 
 
