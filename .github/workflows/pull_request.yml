@@ -63,6 +63,10 @@ jobs:
 
       - name: Golangci-lint
         uses: golangci/golangci-lint-action@v6.0.1
+        with:
+          version: latest
+          github-token: ${{ secrets.ACCESS_TOKEN }}
+          only-new-issues: true
 
   commit_lint:
     runs-on: ubuntu-latest
