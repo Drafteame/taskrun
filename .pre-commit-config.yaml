@@ -5,6 +5,7 @@ repos:
     rev: v1.0.3
     hooks:
       - id: go-vet
+      - id: golangci-lint
 
   - repo: https://github.com/Drafteame/pre-commit-golang
     rev: 0.10.1
@@ -12,8 +13,6 @@ repos:
       - id: go-mod-tidy
       - id: goimports-reviser
         args: ["-excludes=bin,node_modules,tmp,.git"]
-      - id: revive
-        args: ["-config=revive.toml", "-formatter=friendly"]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0

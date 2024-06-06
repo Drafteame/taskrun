@@ -1,14 +1,16 @@
-package cmd
+package run
 
 import (
-	"github.com/Drafteame/taskrun/internal/config"
-	"github.com/Drafteame/taskrun/internal/templating"
 	"log"
 
 	"github.com/spf13/cobra"
 
+	"github.com/Drafteame/taskrun/cmd/root"
+	"github.com/Drafteame/taskrun/internal/config"
+	"github.com/Drafteame/taskrun/internal/console"
 	"github.com/Drafteame/taskrun/internal/exec"
 	"github.com/Drafteame/taskrun/internal/models"
+	"github.com/Drafteame/taskrun/internal/templating"
 )
 
 var runJobCmd = &cobra.Command{
@@ -19,36 +21,46 @@ var runJobCmd = &cobra.Command{
 	Run:   runJob,
 }
 
-func init() {
-	RootCmd.AddCommand(runJobCmd)
+var (
+	stageFlag    *string
+	jobsFileFlag *string
+	debugFlag    *bool
+)
+
+func GetCommand(stage, jobsFile *string, debug *bool) *cobra.Command {
+	stageFlag = stage
+	jobsFileFlag = jobsFile
+	debugFlag = debug
+
+	return runJobCmd
 }
 
 func runJob(cmd *cobra.Command, args []string) {
 	jobName := args[0]
 
-	job, err := config.GetJob(jobName, stageFlag, jobsFileFlag)
+	job, err := config.GetJob(jobName, *stageFlag, *jobsFileFlag)
 	if err != nil {
-		log.Fatal("Error: ", err)
+		log.Fatal("Error getting job: ", err)
 	}
 
 	jobCfg, errRender := templating.NewJobTemplate(job).
-		WithData(getReplacers()).
-		WithAWSConfig(getAwsConfig()).
+		WithData(root.GetReplacers()).
+		WithAWSConfig(root.GetAwsConfig()).
 		Render()
 
 	if errRender != nil {
 		log.Fatal("Error: ", errRender)
 	}
 
-	if debugFlag {
-		printf("Config: \n---------\n%s", jobCfg.ToYAML())
+	if debugFlag != nil && *debugFlag {
+		console.Printf("Config: \n---------\n%s", jobCfg.ToYAML())
 	}
 
 	executeCommand(jobCfg)
 }
 
 func executeCommand(j *models.JobConfig) {
-	cwd := getWorkingDir()
+	cwd := root.GetWorkingDir()
 
 	println("Running job: ", j.Name)
 	println("Working dir: ", cwd)
