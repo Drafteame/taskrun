@@ -1,4 +1,4 @@
-package cmd
+package list
 
 import (
 	"encoding/json"
@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/Drafteame/taskrun/internal/config"
+	"github.com/Drafteame/taskrun/internal/console"
 	"github.com/Drafteame/taskrun/internal/models"
 )
 
@@ -19,16 +20,25 @@ var listCmd = &cobra.Command{
 	Run:   listTasks,
 }
 
-var ltJSONFlag bool
+var (
+	ltJSONFlag   bool
+	stageFlag    *string
+	jobsFileFlag *string
+)
 
 func init() {
 	listCmd.Flags().BoolVarP(&ltJSONFlag, "json", "", false, "Output as JSON")
+}
 
-	RootCmd.AddCommand(listCmd)
+func GetCommand(stage, jobsFile *string) *cobra.Command {
+	stageFlag = stage
+	jobsFileFlag = jobsFile
+
+	return listCmd
 }
 
 func listTasks(cmd *cobra.Command, args []string) {
-	jobs, err := config.GetJobs(stageFlag, jobsFileFlag)
+	jobs, err := config.GetJobs(*stageFlag, *jobsFileFlag)
 	if err != nil {
 		log.Fatal("Error: ", err)
 	}
@@ -42,10 +52,10 @@ func listTasks(cmd *cobra.Command, args []string) {
 }
 
 func printTasks(jobs []models.Job) {
-	printf("Jobs for stage %s:\n---------\n", stageFlag)
+	console.Printf("Jobs for stage %s:\n---------\n", *stageFlag)
 
 	for _, j := range jobs {
-		printf("- %s\n", j.Name)
+		console.Printf("- %s\n", j.Name)
 	}
 }
 

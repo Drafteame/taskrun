@@ -1,9 +1,10 @@
 package config
 
 import (
-	"github.com/Drafteame/taskrun/internal/models"
 	"log"
 	"os"
+
+	"github.com/Drafteame/taskrun/internal/models"
 )
 
 func LoadConfigFromPath(path string) (*models.Jobs, error) {

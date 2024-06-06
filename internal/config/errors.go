@@ -1,6 +1,8 @@
 package config
 
-import "errors"
+import (
+	"errors"
+)
 
 var (
 	errNoStageDefined = errors.New("no stage defined")

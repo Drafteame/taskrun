@@ -1,5 +1,7 @@
 project_name: taskrun
 
+version: 2
+
 before:
   hooks:
     - go mod tidy

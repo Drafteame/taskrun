@@ -36,7 +36,7 @@ func (c *Command) WithWorkingDir(dir string) *Command {
 }
 
 func (c *Command) Run() error {
-	cmd := exec.Command(c.cmd, c.args...)
+	cmd := exec.Command(c.cmd, c.args...) //nolint:gosec
 
 	cmd.Stdout = io.MultiWriter(os.Stdout, &c.stdout)
 	cmd.Stderr = io.MultiWriter(os.Stderr, &c.stderr)
