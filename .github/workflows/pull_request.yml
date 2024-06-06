@@ -10,6 +10,11 @@ concurrency:
   group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }} - Test'
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  pull-requests: read
+  checks: write
+
 jobs:
   test:
     name: Test
@@ -56,10 +61,8 @@ jobs:
       - name: Go vet
         run: go vet ./...
 
-      - name: Run Linter
-        uses: morphy2k/revive-action@v2
-        with:
-          config: revive.toml
+      - name: Golangci-lint
+        uses: golangci/golangci-lint-action@v6.0.1
 
   commit_lint:
     runs-on: ubuntu-latest
