@@ -7,7 +7,7 @@ import (
 )
 
 //nolint:funlen
-func TestJobConfig_ToYAML(t *testing.T) {
+func TestJobConfigToYAML(t *testing.T) {
 	type tt struct {
 		name string
 		jc   JobConfig
