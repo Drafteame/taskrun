@@ -1,3 +1,17 @@
+## v0.1.4 (2024-06-06)
+
+
+- fix: exposed credentials (#16)
+- * fix: obfuscate exposed credentials
+
+* ci: release config version
+
+* style: format test function name
+
+* ci: add golangci-lint to ci
+
+* ci: configure golangci action
+
 ## v0.1.3 (2024-06-06)
 
 
