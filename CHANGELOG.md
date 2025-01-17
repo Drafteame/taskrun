@@ -1,3 +1,9 @@
+## v0.1.6 (2025-01-17)
+
+
+- chore(ci): update vendor hash for version 0.1.6
+- chore: add version updater (#21)
+
 ## v0.1.5 (2025-01-17)
 
 
