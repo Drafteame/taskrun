@@ -37,10 +37,28 @@ jobs:
           git config --local user.name "$GIT_USER_NAME"
           git config --local pull.ff only
 
+      - name: Install commitizen
+        run: pip install -U commitizen
+  
+      - name: Get version
+        id: version
+        run: |
+          version=$(cz bump --dry-run --no-verify | grep tag | sed 's/tag to create: v//')
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+      - name: Update vendor hash
+        run: bash update-nix-hashes.sh "${{ steps.version.outputs.version }}"
+
+      - name: Commit vendor hash update
+        run: |
+          git config --local user.email "${{ env.GIT_USER_EMAIL }}"
+          git config --local user.name "${{ env.GIT_USER_NAME }}"
+          git add flake.nix
+          git commit -m "chore(ci): update vendor hash for version ${{ steps.version.outputs.version }}"
+
       - id: cz
         name: Create bump and changelog
         run: |
-          python -m pip install -U commitizen
           cz bump --changelog --yes
           export REV=`cz version --project`
           echo "version=$REV" >> $GITHUB_OUTPUT
