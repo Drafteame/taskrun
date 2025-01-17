@@ -61,6 +61,10 @@ portable_sed "s/taskrunVersion = \".*\"/taskrunVersion = \"$NEW_VERSION\"/" flak
 log_info "Setting vendorHash to null to compute new hash"
 portable_sed 's/vendorHash = ".*"/vendorHash = ""/' flake.nix
 
+# Update the version in the internal/version.go file
+log_info "Updating version in internal/version.go to $NEW_VERSION"
+portable_sed "s/^var Version = \".*\"/var Version = \"$NEW_VERSION\"/" internal/version.go
+
 # Try to build the package to get the new hash
 log_info "Building package to compute new vendor hash"
 BUILD_OUTPUT=$(nix build 2>&1 || true)
