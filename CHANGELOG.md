@@ -1,3 +1,10 @@
+## v0.1.5 (2025-01-17)
+
+
+- chore(ci): update vendor hash for version 0.1.5
+- chore: added flake into the project (#19)
+- chore: added flake into the project
+
 ## v0.1.4 (2024-06-06)
 
 
